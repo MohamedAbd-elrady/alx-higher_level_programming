@@ -1,16 +1,27 @@
 #!/usr/bin/python3
 """
-Mod docs
+Module 12-student
+
+Contains class Student
+that initializes public instance attributes first_name, last_name, and age,
+and has public method to_json that returns dictionary representation
+of requested attributes or all if none were requested
 """
 
 
-class Student:
+class Student():
     """
-    class docs
+    Public Attributes:
+        first_name
+        last_name
+        age
+
+    Public Methods:
+        to_json: retrieves its dictionary representation
     """
     def __init__(self, first_name, last_name, age):
         """
-        function docs
+        Initializes student with full name and age
         """
         self.first_name = first_name
         self.last_name = last_name
@@ -18,21 +29,19 @@ class Student:
 
     def to_json(self, attrs=None):
         """
-        function doc
-        """
-        final_list = {}
-        all_string = True
-        if not isinstance(type(attrs), list):
-            all_string = False
+        Returns dictionary description with simple data structure
+        (list, dictionary, dictionary, string)
+        for JSON serialization of an object
 
-        if isinstance(type(attrs), list):
-            for i in attrs:
-                if not isinstance(type(i), str):
-                    all_string = False
-        if not all_string:
+        Return:
+            Only return dict of attrs given to us
+            Return entire dict if no attrs given
+        """
+        if attrs is None:
             return self.__dict__
         else:
-            for i in attrs:
-                if i in self.__dict__:
-                    final_list[i] = self.__dict__[i]
-            return final_list
+            dic = {}
+            for att in attrs:
+                if att in self.__dict__.keys():
+                    dic[att] = self.__dict__[att]
+            return dic
