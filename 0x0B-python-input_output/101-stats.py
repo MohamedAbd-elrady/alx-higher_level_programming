@@ -37,7 +37,7 @@ if __name__ == '__main__':
                         code_dict[code] = 1
             except (IndexError, ValueError):
                 pass
-            
+
             i += 1
         print("File size: {:d}".format(total_size))
         for c in sorted(code_dict):
