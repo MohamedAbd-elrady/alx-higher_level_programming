@@ -1,154 +1,241 @@
 #!/usr/bin/python3
 """
-Module contains class Rectangle
-
-Inherits from Base;
-Inits superclass' id
-Contains private width, height, x, y
-Contains public method area
-Displays rectangle using "#"'s
-Prints [Rectangle] (<id>) <x>/<y> - <width>/<height>
-Updates attributes: arg1=id, arg2=width, arg3=height, arg4=x, arg5=y
-Returns dictionary representation of attributes
+Module doc
 """
-
-
 from models.base import Base
 
 
 class Rectangle(Base):
     """
-    defines class Rectangle; inherits from class Base
-    Inherited Attributes:
-        id
-    Class Attributes:
-        __width          __height
-        __x              __y
-    Methods:
-        __init__(self, width, height, x=0, y=0, id=None):
-        update(self, *args, **kwargs)
-        width(self)      width(self, value)
-        height(self)     height(self, value)
-        x(self)          x(self, value)
-        y(self)          y(self, value)
-        area(self)       display(self)
-        __str__          to_dictionary(self)
+    Class docs
     """
+
     def __init__(self, width, height, x=0, y=0, id=None):
-        """Initialize"""
-        super().__init__(id)
+        """
+        Function docs
+        """
+
         self.width = width
         self.height = height
         self.x = x
         self.y = y
 
+        super().__init__(id)
+
     @property
     def width(self):
-        """getter width"""
+        """
+        Function doc
+        """
         return self.__width
-
-    @property
-    def height(self):
-        """getter height"""
-        return self.__height
-
-    @property
-    def x(self):
-        """getter x"""
-        return self.__x
-
-    @property
-    def y(self):
-        """getter y"""
-        return self.__y
 
     @width.setter
     def width(self, value):
-        """setter width"""
-        if not isinstance(type(value), int):
-            raise TypeError("width must be an integer")
-        if value <= 0:
-            raise ValueError("width must be > 0")
+        """
+        Function Doc
+        """
+        self.all_checks("width", value)
         self.__width = value
+
+    @property
+    def height(self):
+        """
+        Function Doc
+        """
+
+        return self.__height
 
     @height.setter
     def height(self, value):
-        """setter height"""
-        if not isinstance(type(value), int):
-            raise TypeError("height must be an integer")
-        if value <= 0:
-            raise ValueError("height must be > 0")
+        """
+        Function doc
+        """
+
+        self.all_checks("height", value)
         self.__height = value
+
+    @property
+    def x(self):
+        """
+        Function doc
+        """
+
+        return self.__x
 
     @x.setter
     def x(self, value):
-        """setter x"""
-        if not isinstance(type(value), int):
-            raise TypeError("x must be an integer")
-        if value < 0:
-            raise ValueError("x must be >= 0")
+        """
+        Function doc
+        """
+
+        self.all_checks("x", value)
         self.__x = value
+
+    @property
+    def y(self):
+        """
+        Function doc
+        """
+
+        return self.__y
 
     @y.setter
     def y(self, value):
-        """setter y"""
-        if not isinstance(type(value), int):
-            raise TypeError("y must be an integer")
-        if value < 0:
-            raise ValueError("y must be >= 0")
+        """
+        Function doc
+        """
+
+        self.all_checks("y", value)
         self.__y = value
 
+    def all_checks(self, attribute, value):
+        """
+        Function docs
+        """
+
+        self.type_int_check(attribute, value)
+        if attribute == 'x' or attribute == 'y':
+            self.negative_check(attribute, value)
+        else:
+            self.zero_and_negative_check(attribute, value)
+
+    def attribute_check(self, attribute):
+        """
+        Function doc
+        """
+
+        if not isinstance(type(attribute), str):
+            raise TypeError("attribute must be of type str")
+
+    def zero_and_negative_check(self, attribute, value):
+        """
+        Function doc
+        """
+
+        self.attribute_check(attribute)
+        if value <= 0:
+            raise ValueError("{} must be > 0".format(attribute))
+
+    def negative_check(self, attribute, value):
+        """
+        Function doc
+        """
+
+        self.attribute_check(attribute)
+        if value < 0:
+            raise ValueError("{} must be >= 0".format(attribute))
+
+    def type_int_check(self, attribute, value):
+        """
+        Function doc
+        """
+
+        self.attribute_check(attribute)
+        if not isinstance(type(value), int):
+            raise TypeError("{} must be an integer".format(attribute))
+
     def area(self):
-        """Return area"""
-        return self.__width * self.__height
+        """
+        Area calculator
+
+        Return:
+            int: area
+        """
+
+        return self.width * self.height
 
     def display(self):
-        """Print to stdout a rectangle using #'s"""
-        print("\n" * self.__y +
-              "\n".join(" " * self.__x + "#" * self.__width
-                        for i in range(self.__height)))
+        """
+        Function doc
+        """
+
+        rectangle = ""
+        for y in range(self.y):
+            rectangle += "\n"
+        for i in range(self.__height):
+            rectangle += (" " * self.x) + ("#" * self.width)
+            if i != (self.height - 1):
+                rectangle += "\n"
+        print(rectangle)
 
     def __str__(self):
-        """Prints [Rectangle] (<id>) <x>/<y> - <width>/<height>"""
-        return "[{:s}] ({:d}) {:d}/{:d} - {:d}/{:d}".format(
-            self.__class__.__name__, self.id, self.__x, self.__y,
-            self.__width, self.__height)
+        """str: Function call"""
+        str_s = "[Rectangle] ({:d}) {:d}/{:d} - {:d}/{:d}"
+        return str_s.format(self.id, self.x, self.y, self.width, self.height)
 
     def update(self, *args, **kwargs):
         """
-        If args: set attributes in this order: id, width, height, x, y
-        If no args given: set attributes according to kwargs
+        Function doc
         """
-        if args:
-            for k, v in enumerate(args):
-                if k == 0:
-                    self.id = v
-                elif k == 1:
-                    self.width = v
-                elif k == 2:
-                    self.height = v
-                elif k == 3:
-                    self.x = v
-                else:
-                    self.y = v
-        else:
-            if "id" in kwargs:
-                self.id = kwargs["id"]
-            if "width" in kwargs:
-                self.width = kwargs["width"]
-            if "height" in kwargs:
-                self.height = kwargs["height"]
-            if "x" in kwargs:
-                self.x = kwargs["x"]
-            if "y" in kwargs:
-                self.y = kwargs["y"]
+
+        if args and len(args) != 0:
+            if len(args) >= 1:
+                self.id = args[0]
+            if len(args) >= 2:
+                self.width = args[1]
+            if len(args) >= 3:
+                self.height = args[2]
+            if len(args) >= 4:
+                self.x = args[3]
+            if len(args) >= 5:
+                self.y = args[4]
+        elif kwargs:
+            valid_attributes = ['id', 'width', 'height', 'x', 'y']
+            for key, value in kwargs.items():
+                if key in valid_attributes:
+                    exec("self.{} = {}".format(key, value))
 
     def to_dictionary(self):
-        """Return dictionary representation"""
-        d = {}
-        d["id"] = self.id
-        d["width"] = self.width
-        d["height"] = self.height
-        d["x"] = self.x
-        d["y"] = self.y
-        return d
+        """
+        Function Doc
+        """
+
+        return {
+                'x': self.x,
+                'y': self.y,
+                'id': self.id,
+                'height': self.height,
+                'width': self.width
+                }
+
+    def __eq__(self, other):
+        """
+        Function Doc
+        """
+
+        return self.area() == other.area()
+
+    def __ne__(self, other):
+        """
+        Function Doc
+        """
+
+        return self.area() != other.area()
+
+    def __lt__(self, other):
+        """
+        Function Doc
+        """
+
+        return self.area() < other.area()
+
+    def __le__(self, other):
+        """
+        Function Doc
+        """
+
+        return self.area() <= other.area()
+
+    def __ge__(self, other):
+        """
+        Function Doc
+        """
+
+        return self.area() >= other.area()
+
+    def __gt__(self, other):
+        """
+        Function Doc
+        """
+
+        return self.area() > other.area()
