@@ -28,4 +28,4 @@ def find_peak(list_of_integers):
     elif ls[mid] < ls[mid+1]:
         return find_peak(ls[mid:end+1])
     else:
-        return l[beg]
+        return ls[beg]
